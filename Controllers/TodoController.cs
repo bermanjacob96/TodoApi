@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TodoApi.Models;
 
-namespace TodoApi.Controllers
+namespace TodoApi.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -25,5 +25,27 @@ namespace TodoApi.Controllers
                 _context.SaveChanges();
             }
         }
+    
+        // GET: api/Todo
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
+        {
+            return await _context.TodoItems.ToListAsync();
+        }
+
+        // GET: api/Todo/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TodoItem>> GetTodoItems(long id)
+        {
+            var todoItem = await _context.TodoItems.FindAsync(id);
+
+            if (todoItem == null)
+            {
+                return NotFound();
+            }
+
+            return todoItem;
+        }
+
     }
 }
